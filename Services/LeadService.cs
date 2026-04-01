@@ -44,13 +44,12 @@ namespace ExchangeLeadSystem.Services
             return leads.Select(MapToResponseDto);
         }
 
-        public async Task<LeadResponseDto?> GetByIdAsync(int id)
+        public async Task<LeadResponseDto> GetByIdAsync(int id)
         {
             var lead = await _context.Leads
                 .Include(l => l.Notes)
-                .FirstOrDefaultAsync(l => l.Id == id);
-
-            if (lead == null) return null;
+                .FirstOrDefaultAsync(l => l.Id == id)
+                ?? throw new KeyNotFoundException($"Lead {id} não encontrado");
 
             return MapToResponseDto(lead);
         }

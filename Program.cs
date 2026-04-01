@@ -71,6 +71,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseMiddleware<ExchangeLeadSystem.Middlewares.ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

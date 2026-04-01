@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExchangeLeadSystem.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -16,13 +16,11 @@ namespace ExchangeLeadSystem.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        public async Task<ActionResult<TokenResponseDto>> Login([FromBody] LoginDto dto)
         {
             var result = await _authService.LoginAsync(dto);
-
             if (result == null)
                 return Unauthorized(new { message = "Email ou senha inválidos" });
-
             return Ok(result);
         }
     }

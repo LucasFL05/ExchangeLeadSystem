@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExchangeLeadSystem.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class LeadsController : ControllerBase
     {
         private readonly ILeadService _leadService;
@@ -19,7 +19,7 @@ namespace ExchangeLeadSystem.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Create([FromBody] CreateLeadDto dto)
+        public async Task<ActionResult<LeadResponseDto>> Create([FromBody] CreateLeadDto dto)
         {
             var lead = await _leadService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = lead.Id }, lead);
@@ -27,7 +27,7 @@ namespace ExchangeLeadSystem.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<IEnumerable<LeadResponseDto>>> GetAll()
         {
             var leads = await _leadService.GetAllAsync();
             return Ok(leads);
@@ -35,41 +35,26 @@ namespace ExchangeLeadSystem.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<LeadResponseDto>> GetById(int id)
         {
             var lead = await _leadService.GetByIdAsync(id);
-            if (lead == null) return NotFound();
             return Ok(lead);
         }
 
         [HttpPatch("{id}/status")]
         [Authorize]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateLeadStatusDto dto)
+        public async Task<ActionResult<LeadResponseDto>> UpdateStatus(int id, [FromBody] UpdateLeadStatusDto dto)
         {
-            try
-            {
-                var lead = await _leadService.UpdateStatusAsync(id, dto);
-                return Ok(lead);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            var lead = await _leadService.UpdateStatusAsync(id, dto);
+            return Ok(lead);
         }
 
         [HttpPost("{id}/notes")]
         [Authorize]
-        public async Task<IActionResult> AddNote(int id, [FromBody] CreateNoteDto dto)
+        public async Task<ActionResult<LeadResponseDto>> AddNote(int id, [FromBody] CreateNoteDto dto)
         {
-            try
-            {
-                var lead = await _leadService.AddNoteAsync(id, dto);
-                return Ok(lead);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            var lead = await _leadService.AddNoteAsync(id, dto);
+            return Ok(lead);
         }
     }
 }

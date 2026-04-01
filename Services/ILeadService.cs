@@ -7,7 +7,7 @@ namespace ExchangeLeadSystem.Services
     {
         Task<LeadResponseDto> CreateAsync(CreateLeadDto dto);
         Task<IEnumerable<LeadResponseDto>> GetAllAsync();
-        Task<LeadResponseDto?> GetByIdAsync(int id);
+        Task<LeadResponseDto> GetByIdAsync(int id);
         Task<LeadResponseDto> UpdateStatusAsync(int id, UpdateLeadStatusDto dto);
         Task<LeadResponseDto> AddNoteAsync(int id, CreateNoteDto dto);
     }
